@@ -1,0 +1,46 @@
+#!/usr/bin/env ruby
+require 'preview'
+require 'optparse'
+
+# config  = Preview::Config.new
+
+options = {}
+
+optparse = OptionParser.new do |opts| 
+  
+  opts.on( '-f', '--from from', "From address. Must be a valid Postmark signature." ) do |arg|
+    options[:from] = arg
+  end
+
+  opts.on('-h', '--help', 'Display help info') do                                                                                                                                                               
+    puts opts                                                                                                                                                                                                     
+    exit                                                                                                                                                                                                          
+  end
+end
+
+begin
+  optparse.parse!
+  options = config.settings.merge(options)
+  mandatory = [:from, :to, :body, :api_key]
+  missing = mandatory.select{ |param| options[param].nil? }
+  if not missing.empty?
+    puts "Missing options: #{missing.join(', ')}"
+    puts optparse
+    exit
+  end
+rescue OptionParser::InvalidOption, OptionParser::MissingArgument
+  puts $!.to_s
+  puts optparse
+  exit
+end
+
+begin
+  message = Pmail::Message.new(options)
+  message.send  
+rescue Postmark::InvalidMessageError
+  puts "Invalid message: " + $!.to_s
+  exit 1
+rescue Exception => e
+  puts e.to_s
+  exit 1
+end
