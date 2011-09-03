@@ -1,45 +1,56 @@
+require 'rubygems'
 require 'zerigo_dns'
 
 module Preview
   class Dns
     
-    attr_writer :host, :user, :api_key, :zone_id, :cname
-    
-    def initialize
-      @host    = nil
-      @user    = nil
-      @api_key = nil
-      
-      Zerigo::DNS::Base.user    = 'test@example.com'
-      Zerigo::DNS::Base.api_key = 'ca01ffae311a7854ea366b05cd02bd50'
+    def initialize(options = {})
+      Zerigo::DNS::Base.user     = options[:user]
+      Zerigo::DNS::Base.password = options[:api_key]
+      Zerigo::DNS::Base.format   = :xml
+
+      @zone_id = options[:zone_id]
+      @host    = options[:host]
+      @cname   = options[:cname]
     end
     
-    def add_record
-      host = {
+    def add_cname
+      vals = {
         :hostname  => @host,
         :host_type => 'CNAME',
         :data      => @cname,
-        :ttl       => 86400,
         :zone_id   => @zone_id
       }
+      
       begin
-        newhost = Zerigo::DNS::Host.create(host)
-        puts "  Host #{newhost.hostname} created successfully with id #{newhost.id}."
-      rescue ResourceParty::ValidationError => e
-        puts "  There was an error saving the new host."
-        puts e.message.join(', ')+'.'
+        Zerigo::DNS::Host.create(vals)
+      rescue Exception => e
+        if e.to_s.include? 'wrong number of arguments (2 for 1)'
+          puts "Successfully created #{@host}.#{@cname}"
+        else
+          puts e
+        end
       end
       
     end
     
-    def record_exists?
-      
+    def record_exists?(hostname)
+      hosts = Zerigo::DNS::Host.find(:all, :params=>{:zone_id => @zone_id)
+      hosts.any? { |hash| hash.hostname == hostname }
     end
     
   end
 end
 
-dns = Preview::Dns.new
-dns.user = 'admin@flickerbox.com'
-dns.api_key = 'asdfasdfasdf'
-dns.host = 'sliderocket'
+options = {}
+options[:user]    = ''
+options[:api_key] = ''
+options[:zone_id] = '2107642932'
+options[:host]    = 'test_hossdssst32fs'
+options[:cname]   = 'benubois.com'
+
+dns = Preview::Dns.new(options)
+
+unless dns.record_exists? options[:host]
+  dns.add_cname
+end

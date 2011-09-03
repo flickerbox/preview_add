@@ -1,27 +1,35 @@
-require "erb"
+require 'erb'
 
-  # Create template.
-  template = %q{
-    From:  James Edward Gray II <james@grayproductions.net>
-    To:  <%= to %>
-    Subject:  Addressing Needs
+module Preview
+  class Vhost
+    
+    def initialize(options)
+      @auth_name      = options[:auth_name]
+      @auth_user_file = options[:auth_user_file]
+      @document_root  = options[:document_root]
+      @server_name    = options[:server_name]
+    end
+    
+    def generate_vhost
+      file = File.join(File.expand_path(File.dirname(__FILE__)), 'vhost.erb')
+      vhost = ERB.new(File.read(file))
+      vhost.result(binding)
+    end
+    
+    def htpasswd
+      `htpasswd -bn test test`
+    end
+    
+  end
+end
 
+options = {
+  :auth_name      => 'Flickerbox',
+  :auth_user_file => 'com.flickerbox',
+  :document_root  => 'com.flickerbox',
+  :server_name    => 'flickerbox.flickerbox.com'
+}
+vhost = Preview::Vhost.new(options)
 
-    Just wanted to send a quick note assuring that your needs are being
-    addressed.
-
-    I want you to know that my team will keep working on the issues,
-    especially:
-
-    Thanks for your patience.
-
-    James Edward Gray II
-  }.gsub(/^  /, '')
-
-  message = ERB.new(template)
-
-  # Set up template data.
-  to = "Community Spokesman <spokesman@ruby_community.org>"
-
-  email = message.result
-  puts email
+# puts vhost.generate_vhost
+puts vhost.htpasswd
