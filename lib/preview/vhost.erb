@@ -1,10 +1,10 @@
 <VirtualHost *:80>
 	ServerName <%= @server_name %>
-	DocumentRoot /var/www/preview/<%= @document_root %>
-	<Directory /var/www/preview/<%= @document_root %>>
-		AuthName "<%= @auth_name %> Preview Website"
+	DocumentRoot <%= @document_root %>
+	<Directory <%= @document_root %>>
+		AuthName "Preview Website"
 		AuthType Basic
-		AuthUserFile /var/www/pw/<%= @auth_user %>
+		AuthUserFile <%= @auth_user_file %>
 		Require valid-user
 	</Directory>
 </VirtualHost>

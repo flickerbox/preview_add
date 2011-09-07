@@ -1,12 +1,8 @@
-require 'fileutils'
 require 'yaml'
-require 'pp'
 
 module Preview
   
   class Config
-    
-    include FileUtils
     
     FILE = "/etc/preview"
     
@@ -22,8 +18,3 @@ module Preview
   end
 
 end
-
-# config = Preview::Config.config
-# pp config
-# 
-# puts config[:zerigo][:api_key]
