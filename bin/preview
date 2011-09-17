@@ -8,8 +8,20 @@ options = {}
 
 optparse = OptionParser.new do |opts| 
   
-  opts.on( '-f', '--from from', "From address. Must be a valid Postmark signature." ) do |arg|
-    options[:from] = arg
+  opts.on( '-s', '--site url', "Website URL. URL of the actual domain, not the preview dowmain." ) do |arg|
+    options[:host] = arg
+  end
+  
+  opts.on( '-f', '--htpasswd [file]', "Specify the htpasswd file to use" ) do |arg|
+    options[:htpasswd] = arg
+  end
+  
+  opts.on( '-u', '--username [username]', "Username for the htpasswd file." ) do |arg|
+    options[:username] = arg
+  end
+  
+  opts.on( '-p', '--password [password]', "Password for the htpasswd file." ) do |arg|
+    options[:password] = arg
   end
 
   opts.on('-h', '--help', 'Display help info') do                                                                                                                                                               
@@ -20,8 +32,7 @@ end
 
 begin
   optparse.parse!
-  options = config.settings.merge(options)
-  mandatory = [:from, :to, :body, :api_key]
+  mandatory = [:host]
   missing = mandatory.select{ |param| options[param].nil? }
   if not missing.empty?
     puts "Missing options: #{missing.join(', ')}"
@@ -35,11 +46,8 @@ rescue OptionParser::InvalidOption, OptionParser::MissingArgument
 end
 
 begin
-  message = Pmail::Message.new(options)
-  message.send  
-rescue Postmark::InvalidMessageError
-  puts "Invalid message: " + $!.to_s
-  exit 1
+  preview = Preview::Preview.new(options)
+  preview.add_site
 rescue Exception => e
   puts e.to_s
   exit 1

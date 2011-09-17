@@ -45,13 +45,3 @@ module Preview
     
   end
 end
-
-opts = {
-  :host => 'http://blog.flickerbox.com'
-}
-
-preview = Preview::Preview.new(opts)
-preview.add_site
-
-pp preview.config
-pp preview.names

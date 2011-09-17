@@ -15,9 +15,25 @@ module Preview
       @names = names
       
       @auth_name      = 'TODO'
-      @auth_user_file = File.join(@config[:locations][:htpasswd], "#{@names.domain}.htpasswd")
+      @auth_user_file = auth_user_file
       @document_root  = File.join(@config[:locations][:vhosts], @names.document_root)
       @server_name    = "#{@names.server_name}.#{@config[:preview_domain]}"
+    end
+    
+    def auth_user_file
+      htpasswd_dir = @config[:locations][:htpasswd];
+      extension = '.htpasswd'
+      auth_user_file = File.join(htpasswd_dir, "#{@names.domain + extension}")
+
+      unless @config[:htpasswd].nil?
+        if @config[:htpasswd].end_with?(extension)
+          auth_user_file = File.join(htpasswd_dir, "#{@config[:htpasswd]}")
+        else
+          auth_user_file = File.join(htpasswd_dir, "#{@config[:htpasswd] + extension}")
+        end
+      end
+
+      auth_user_file
     end
 
     def generate_vhost
@@ -43,12 +59,17 @@ module Preview
       
       # Create the htpasswd file if it doesn't exist
       unless File.exists? @auth_user_file
-        puts "No htpasswd file exists."
-        puts "Username: #{@names.base_name}"
-        print "Password: "
-        password = gets.to_s.strip
+        username = @config[:username] || @names.base_name
+        password = @config[:password] || nil
         
-        File.open(@auth_user_file, 'w') { |f| f.write(htpasswd(@names.base_name, password)) }
+        if password.nil?
+          puts "No htpasswd file exists."
+          puts "Username: #{username}"
+          print "Password: "
+          password = gets.to_s.strip
+        end
+        
+        File.open(@auth_user_file, 'w') { |f| f.write(htpasswd(username, password)) }
       end
       
       unless @config[:mode] == 'test'
