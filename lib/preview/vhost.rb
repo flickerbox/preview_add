@@ -84,14 +84,3 @@ module Preview
     
   end
 end
-
-# vhost = Preview::Vhost.new('http://www.flickerbox.com')
-# vhost.create!
-# vhost = Preview::Vhost.new('http://login.sliderocket.com')
-# vhost.create!
-# puts vhost.vhost
-# vhost = Preview::Vhost.new('blog.sliderocket.com')
-# puts vhost.vhost
-
-# puts vhost.generate_vhost
-# puts vhost.vhost

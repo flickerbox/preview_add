@@ -4,7 +4,6 @@ require "preview/names"
 require "preview/dns"
 require "preview/vhost"
 require "preview/svn"
-require "pp"
 
 module Preview
   class Preview
@@ -17,7 +16,7 @@ module Preview
     end
     
     def add_dns
-      dns = Dns.new(@config, @server_name)
+      dns = Dns.new(@config, @names.server_name)
       dns.create_if_not_exists
     end
     
@@ -28,18 +27,17 @@ module Preview
     
     def checkout_site
       Svn.co(@config, @names)
-      vhost.create!
     end
     
     def add_site
       # Add DNS Entry
-      # add_dns
+      add_dns
       
       # Add Vhost
       add_vhost
       
       # Checkout site
-      # checkout_site
+      checkout_site
       
     end
     

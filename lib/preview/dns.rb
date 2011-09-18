@@ -52,16 +52,3 @@ module Preview
     
   end
 end
-
-# options = {}
-# options[:user]    = ''
-# options[:api_key] = ''
-# options[:zone_id] = '2107642932'
-# options[:host]    = 'test_hossdssst32fs'
-# options[:cname]   = 'benubois.com'
-# 
-# dns = Preview::Dns.new(options)
-# 
-# unless dns.record_exists? options[:host]
-#   dns.add_cname
-# end

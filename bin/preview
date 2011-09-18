@@ -1,54 +1,79 @@
 #!/usr/bin/env ruby
+#/ Usage: preview <options> <host>...
+#/
+#/ The host should be the host of the live site, not the preview site.
+#/
+#/ Add preview sites for the specified host. Creates the DNS, Vhost, htpasswd
+#/ file and checks the site out from revision control
+#/ 
+#/ Options
+#/   -f, --htpasswd   specify the htpasswd file to use
+#/   -u, --username   username for the htpasswd file
+#/   -p, --password   password for the htpasswd file
+#/   -h, --help       show this help message
 require 'preview'
 require 'optparse'
 
-# config  = Preview::Config.new
+if ENV['USER'] != 'root'
+  puts "You must run preview as root"
+  exit 1
+end
+
+def usage
+  puts File.readlines(__FILE__).
+    grep(/^#\/.*/).
+    map { |line| line.chomp[3..-1] }.
+    join("\n")
+end
 
 options = {}
 
 optparse = OptionParser.new do |opts| 
   
-  opts.on( '-s', '--site url', "Website URL. URL of the actual domain, not the preview dowmain." ) do |arg|
-    options[:host] = arg
-  end
-  
-  opts.on( '-f', '--htpasswd [file]', "Specify the htpasswd file to use" ) do |arg|
+  opts.on( '-f', '--htpasswd [file]') do |arg|
     options[:htpasswd] = arg
   end
   
-  opts.on( '-u', '--username [username]', "Username for the htpasswd file." ) do |arg|
+  opts.on( '-u', '--username [username]') do |arg|
     options[:username] = arg
   end
   
-  opts.on( '-p', '--password [password]', "Password for the htpasswd file." ) do |arg|
+  opts.on( '-p', '--password [password]') do |arg|
     options[:password] = arg
   end
 
-  opts.on('-h', '--help', 'Display help info') do                                                                                                                                                               
-    puts opts                                                                                                                                                                                                     
-    exit                                                                                                                                                                                                          
+  opts.on('-v', '--version') do
+    puts Preview::VERSION
+    exit 0
+  end
+
+  opts.on('-h', '--help', 'Display help info') do
+    usage
+    exit 0
   end
 end
 
 begin
   optparse.parse!
+  
+  # The url has no flag and will be in ARGV[0] if it's set
+  options[:host] = ARGV[0] || nil
+
+  # Reset ARGV for gets later
+  ARGV.clear
+  
   mandatory = [:host]
   missing = mandatory.select{ |param| options[param].nil? }
-  if not missing.empty?
-    puts "Missing options: #{missing.join(', ')}"
-    puts optparse
-    exit
+  unless missing.empty?
+    puts "Missing option#{'s' if missing.length > 1}: #{missing.join(', ')}"
+    usage
+    exit 1
   end
 rescue OptionParser::InvalidOption, OptionParser::MissingArgument
   puts $!.to_s
-  puts optparse
-  exit
-end
-
-begin
-  preview = Preview::Preview.new(options)
-  preview.add_site
-rescue Exception => e
-  puts e.to_s
+  usage
   exit 1
 end
+
+preview = Preview::Preview.new(options)
+preview.add_site

@@ -4,7 +4,7 @@ module Preview
     attr_reader :document_root, :domain, :server_name, :host, :base_name
     
     def initialize(host)
-      @host = host
+      @host = host.dup
       @host.gsub!(/^(https?:\/\/)?(www\.)?/, '')
       
       parts          = @host.split('.')

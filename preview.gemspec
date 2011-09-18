@@ -7,9 +7,9 @@ Gem::Specification.new do |s|
   s.version     = Preview::VERSION
   s.authors     = ["Ben Ubois"]
   s.email       = ["ben@benubois.com"]
-  s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.homepage    = "https://github.com/flickerbox/preview"
+  s.summary     = %q{Add preview sites}
+  s.description = %q{Add preview sites for the specified host. Creates the DNS, Vhost, htpasswd file and checks the site out from revision control}
 
   s.rubyforge_project = "preview"
 
