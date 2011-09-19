@@ -11,7 +11,7 @@ module PreviewAdd
       
       @zone_id = options[:zerigo][:zone_id]
       @host    = host
-      @cname   = options[:preview_domain]
+      @cname   = options[:zerigo][:cname]
     end
     
     def add_cname

@@ -21,7 +21,7 @@ module PreviewAdd
     end
     
     def auth_user_file
-      htpasswd_dir = @config[:locations][:htpasswd];
+      htpasswd_dir = @config[:locations][:htpasswd]
       extension = '.htpasswd'
       auth_user_file = File.join(htpasswd_dir, "#{@names.domain + extension}")
 
