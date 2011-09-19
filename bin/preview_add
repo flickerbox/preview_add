@@ -15,7 +15,7 @@ require 'preview_add'
 require 'optparse'
 
 if ENV['USER'] != 'root'
-  puts "You must run preview as root"
+  puts "You must run preview_add as root"
   exit 1
 end
 
