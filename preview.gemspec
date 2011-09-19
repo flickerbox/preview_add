@@ -1,10 +1,10 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "preview/version"
+require "preview_add/version"
 
 Gem::Specification.new do |s|
-  s.name        = "preview"
-  s.version     = Preview::VERSION
+  s.name        = "preview_add"
+  s.version     = PreviewAdd::VERSION
   s.authors     = ["Ben Ubois"]
   s.email       = ["ben@benubois.com"]
   s.homepage    = "https://github.com/flickerbox/preview"

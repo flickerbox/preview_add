@@ -1,7 +1,7 @@
 require 'erb'
 require 'fileutils'
 
-module Preview
+module PreviewAdd
   class Vhost
     
     include FileUtils

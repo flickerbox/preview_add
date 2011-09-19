@@ -1,4 +1,4 @@
-module Preview
+module PreviewAdd
   class Names
     
     attr_reader :document_root, :domain, :server_name, :host, :base_name

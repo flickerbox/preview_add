@@ -1,4 +1,4 @@
 source "http://rubygems.org"
 
-# Specify your gem's dependencies in preview.gemspec
+# Load dependencies from preview.gemspec
 gemspec

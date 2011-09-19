@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'zerigo_dns'
 
-module Preview
+module PreviewAdd
   class Dns
     
     def initialize(options, host)

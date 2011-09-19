@@ -1,12 +1,12 @@
-require "preview/version"
-require "preview/config"
-require "preview/names"
-require "preview/dns"
-require "preview/vhost"
-require "preview/svn"
+require "preview_add/version"
+require "preview_add/config"
+require "preview_add/names"
+require "preview_add/dns"
+require "preview_add/vhost"
+require "preview_add/svn"
 
-module Preview
-  class Preview
+module PreviewAdd
+  class PreviewAdd
     
     attr_reader :config, :names
     

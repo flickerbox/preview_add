@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-#/ Usage: preview <options> <host>...
+#/ Usage: preview_add <options> <host>...
 #/
 #/ The host should be the host of the live site, not the preview site.
 #/
@@ -11,7 +11,7 @@
 #/   -u, --username   username for the htpasswd file
 #/   -p, --password   password for the htpasswd file
 #/   -h, --help       show this help message
-require 'preview'
+require 'preview_add'
 require 'optparse'
 
 if ENV['USER'] != 'root'
@@ -43,7 +43,7 @@ optparse = OptionParser.new do |opts|
   end
 
   opts.on('-v', '--version') do
-    puts Preview::VERSION
+    puts PreviewAdd::VERSION
     exit 0
   end
 
@@ -75,5 +75,5 @@ rescue OptionParser::InvalidOption, OptionParser::MissingArgument
   exit 1
 end
 
-preview = Preview::Preview.new(options)
+preview = PreviewAdd::PreviewAdd.new(options)
 preview.add_site

@@ -1,4 +1,4 @@
-module Preview
+module PreviewAdd
   class Svn
     
     def self.co(config, names)
